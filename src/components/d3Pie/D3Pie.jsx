@@ -4,6 +4,7 @@ const D3Pie = () => {
   const dataFetchedRef = useRef(false);
   let angleIndex = 0;
   let pi = Math.PI;
+  let arrAngle = [];
 
   let newAngle = 0;
   let tempAngle = 0;
@@ -44,8 +45,27 @@ const D3Pie = () => {
       .on("drag", dragmove)
       .on("end", function (d) {
         newAngle = tempAngle;
+        arrAngle.push(angularScale(abval));
         angleIndex++;
+        addArc();
       });
+    function addArc() {
+      var pi = Math.PI;
+
+      let arc = d3
+        .arc()
+        .innerRadius(0)
+        .outerRadius(radius)
+        .startAngle(arrAngle[angleIndex - 1] * (pi / 180))
+        .endAngle(arrAngle[angleIndex] * (pi / 180));
+      ring
+        .append("path")
+        .attr("class", "arc")
+        .attr("d", arc)
+        .attr("fill", function () {
+          return "hsl(" + Math.floor(Math.random() * 16777215) + ",100%,50%)";
+        });
+    }
 
     const hndl = ring
       .append("circle")
@@ -58,6 +78,8 @@ const D3Pie = () => {
         );
       })
       .call(drag);
+
+    arrAngle.push(0);
 
     function dragmove(d, i) {
       if (tempAngle != 360) {
@@ -80,7 +102,6 @@ const D3Pie = () => {
         }
         if (currentAngle > newAngle) {
           tempAngle = currentAngle;
-
           abval = angularScale.invert(currentAngle);
         }
 
