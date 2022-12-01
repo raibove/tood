@@ -1,10 +1,24 @@
 import * as d3 from "d3";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Button, Modal } from "antd";
+
 const D3Pie = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const dataFetchedRef = useRef(false);
   let angleIndex = 0;
-  let pi = Math.PI;
-  let arrAngle = [];
+  const pi = Math.PI;
+  const [arrAngle, setArrAngle] = useState([]);
+  const [arcArray, setArcArray] = useState([]);
 
   let newAngle = 0;
   let tempAngle = 0;
@@ -45,10 +59,13 @@ const D3Pie = () => {
       .on("drag", dragmove)
       .on("end", function (d) {
         newAngle = tempAngle;
-        arrAngle.push(angularScale(abval));
+        let tempArrAngle = arrAngle;
+        tempArrAngle.push(angularScale(abval));
+        setArrAngle(tempArrAngle);
         angleIndex++;
         addArc();
         hndl.moveToFront();
+        showModal();
       });
 
     function addArc() {
@@ -58,13 +75,17 @@ const D3Pie = () => {
         .outerRadius(radius)
         .startAngle(arrAngle[angleIndex - 1] * (pi / 180))
         .endAngle(arrAngle[angleIndex] * (pi / 180));
-      ring
+      let colorArc = ring
         .append("path")
         .attr("class", "arc")
         .attr("d", arc)
         .attr("fill", function () {
           return "hsl(" + Math.floor(Math.random() * 16777215) + ",100%,50%)";
         });
+
+      let tempArcArray = arcArray;
+      tempArcArray.push(colorArc);
+      setArcArray(tempArcArray);
     }
 
     d3.selection.prototype.moveToFront = function () {
@@ -120,6 +141,11 @@ const D3Pie = () => {
     }
   };
 
+  const printArc = () => {
+    console.log(arcArray);
+    arcArray[1].attr("fill", "black");
+  };
+
   useEffect(() => {
     if (dataFetchedRef.current) return;
     dataFetchedRef.current = true;
@@ -129,6 +155,19 @@ const D3Pie = () => {
   return (
     <div>
       <div className="ring-input"></div>
+      <div>
+        <button onClick={printArc}>print</button>
+      </div>
+      <Modal
+        title="Basic Modal"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
     </div>
   );
 };
