@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 const D3Pie = () => {
-    const dataFetchedRef = useRef(false);
+  const dataFetchedRef = useRef(false);
   let arrAngle = [];
   let angleIndex = 0;
   let pi = Math.PI;
@@ -36,11 +36,22 @@ const D3Pie = () => {
       .attr("class", "ring")
       .attr("id", "ring")
       .attr("fill", "white");
+
+    const hndl = ring
+      .append("circle")
+      .attr("r", 10)
+      .attr("class", "handle")
+      .attr("id", "handle")
+      .attr("transform", function (d) {
+        return (
+          "rotate(" + angularScale(abval) + ")  translate(0,-" + radius + ")"
+        );
+      });
   };
 
   useEffect(() => {
-       if (dataFetchedRef.current) return;
-      dataFetchedRef.current = true;
+    if (dataFetchedRef.current) return;
+    dataFetchedRef.current = true;
     createSvg();
   }, []);
 
