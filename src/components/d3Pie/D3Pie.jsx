@@ -48,10 +48,10 @@ const D3Pie = () => {
         arrAngle.push(angularScale(abval));
         angleIndex++;
         addArc();
+        hndl.moveToFront();
       });
-    function addArc() {
-      var pi = Math.PI;
 
+    function addArc() {
       let arc = d3
         .arc()
         .innerRadius(0)
@@ -66,6 +66,12 @@ const D3Pie = () => {
           return "hsl(" + Math.floor(Math.random() * 16777215) + ",100%,50%)";
         });
     }
+
+    d3.selection.prototype.moveToFront = function () {
+      return this.each(function () {
+        this.parentNode.appendChild(this);
+      });
+    };
 
     const hndl = ring
       .append("circle")
