@@ -1,6 +1,11 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { Button, Modal } from "antd";
+import { Input, Modal } from "antd";
+import FloatInput from "./FloatInput";
+
+import "./D3Pie.css";
+
+const { TextArea } = Input;
 
 const D3Pie = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,6 +24,7 @@ const D3Pie = () => {
   const pi = Math.PI;
   const [arrAngle, setArrAngle] = useState([]);
   const [arcArray, setArcArray] = useState([]);
+  const [title, setTitle] = useState("");
 
   let newAngle = 0;
   let tempAngle = 0;
@@ -152,21 +158,32 @@ const D3Pie = () => {
     createSvg();
   }, []);
 
+  const onChange = (e) => {
+    setTitle(e.target.value);
+  };
+
   return (
     <div>
       <div className="ring-input"></div>
-      <div>
-        <button onClick={printArc}>print</button>
-      </div>
       <Modal
-        title="Basic Modal"
+        title="To do"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        okText="Save"
+        maskClosable={false}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <div className="to-do-title">
+          <FloatInput
+            label="Title"
+            placeholder="Title here please"
+            name="title"
+            onChange={onChange}
+            value={title}
+            required={true}
+          />
+        </div>
+        <TextArea rows={4} placeholder="description (optional)" />
       </Modal>
     </div>
   );
