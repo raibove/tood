@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { Input, Modal } from "antd";
+import { Button, Input, Modal } from "antd";
 import FloatInput from "./FloatInput";
 
 import "./D3Pie.css";
@@ -8,23 +8,47 @@ import "./D3Pie.css";
 const { TextArea } = Input;
 
 const D3Pie = () => {
+  const [arrAngle, setArrAngle] = useState([]);
+  const [arcArray, setArcArray] = useState([]);
+  const [title, setTitle] = useState("");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
+
   const handleOk = () => {
     setIsModalOpen(false);
   };
+
   const handleCancel = () => {
+    //   let tempArrAngle = arrAngle;
+    //   console.log(typeof tempArrAngle);
+    //   console.log(tempArrAngle);
+    //   arrAngle.pop();
+    //   setArrAngle(arrAngle);
+
+    //   let tempArr = arcArray.pop();
+    //   console.log(tempArr);
+    //   tempArr.remove();
+    //   setArcArray(arcArray);
+    //   // tempAngle.pop();
+    //   // setArrAngle(tempArrAngle);
+
+    //   // setArrAngle((prev) => {
+    //   //   // 1. we clone the array by destructuring
+    //   //   // 2. use pop to remove last item in array
+    //   //   const next = [...prev];
+    //   //   next.pop();
+    //   //   return next;
+    //   // });
     setIsModalOpen(false);
   };
 
   const dataFetchedRef = useRef(false);
   let angleIndex = 0;
   const pi = Math.PI;
-  const [arrAngle, setArrAngle] = useState([]);
-  const [arcArray, setArcArray] = useState([]);
-  const [title, setTitle] = useState("");
 
   let newAngle = 0;
   let tempAngle = 0;
@@ -163,15 +187,21 @@ const D3Pie = () => {
   };
 
   return (
-    <div>
+    <div className="to-do-container">
       <div className="ring-input"></div>
       <Modal
         title="To do"
         open={isModalOpen}
         onOk={handleOk}
+        closable={false}
         onCancel={handleCancel}
         okText="Save"
         maskClosable={false}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleOk}>
+            Save
+          </Button>,
+        ]}
       >
         <div className="to-do-title">
           <FloatInput
