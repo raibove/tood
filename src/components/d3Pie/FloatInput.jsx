@@ -24,8 +24,12 @@ const FloatInput = (props) => {
       <Input
         onChange={props.onChange}
         type={type}
-        defaultValue={value}
+        value={value}
+        // defaultValue={value}
         size="large"
+        ref={props.myRef}
+        autoFocus={true}
+        onKeyDown={props.onKeyDown}
       />
       <label className={labelClass}>
         {isOccupied ? label : placeholder} {requiredMark}

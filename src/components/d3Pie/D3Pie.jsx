@@ -8,17 +8,33 @@ import "./D3Pie.css";
 const { TextArea } = Input;
 
 const D3Pie = () => {
+  const myRef = useRef();
   const [arrAngle, setArrAngle] = useState([]);
   const [arcArray, setArcArray] = useState([]);
   const [title, setTitle] = useState("");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toDo, setToDo] = useState([]);
+
+  const dataFetchedRef = useRef(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (myRef && myRef.current) {
+        const { input } = myRef.current;
+        input.focus();
+      }
+    }, 1);
+  }, [isModalOpen]);
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
   const handleOk = () => {
+    let tempToDo = toDo;
+    tempToDo.push(title);
+    setTitle("");
+    setToDo(tempToDo);
     setIsModalOpen(false);
   };
 
@@ -46,7 +62,6 @@ const D3Pie = () => {
     setIsModalOpen(false);
   };
 
-  const dataFetchedRef = useRef(false);
   let angleIndex = 0;
   const pi = Math.PI;
 
@@ -182,6 +197,11 @@ const D3Pie = () => {
     createSvg();
   }, []);
 
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      handleOk();
+    }
+  };
   const onChange = (e) => {
     setTitle(e.target.value);
   };
@@ -209,8 +229,10 @@ const D3Pie = () => {
             placeholder="Title here please"
             name="title"
             onChange={onChange}
+            onKeyDown={handleKeyDown}
             value={title}
             required={true}
+            myRef={myRef}
           />
         </div>
         <TextArea rows={4} placeholder="description (optional)" />
