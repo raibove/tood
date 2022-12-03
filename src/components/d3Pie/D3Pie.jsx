@@ -39,26 +39,6 @@ const D3Pie = () => {
   };
 
   const handleCancel = () => {
-    //   let tempArrAngle = arrAngle;
-    //   console.log(typeof tempArrAngle);
-    //   console.log(tempArrAngle);
-    //   arrAngle.pop();
-    //   setArrAngle(arrAngle);
-
-    //   let tempArr = arcArray.pop();
-    //   console.log(tempArr);
-    //   tempArr.remove();
-    //   setArcArray(arcArray);
-    //   // tempAngle.pop();
-    //   // setArrAngle(tempArrAngle);
-
-    //   // setArrAngle((prev) => {
-    //   //   // 1. we clone the array by destructuring
-    //   //   // 2. use pop to remove last item in array
-    //   //   const next = [...prev];
-    //   //   next.pop();
-    //   //   return next;
-    //   // });
     setIsModalOpen(false);
   };
 
@@ -206,9 +186,28 @@ const D3Pie = () => {
     setTitle(e.target.value);
   };
 
+  const checkboxChange = (e) => {
+    console.log(e.target.checked);
+  };
+
   return (
     <div className="to-do-container">
       <div className="ring-input"></div>
+      <div className="to-do-list">
+        {toDo.map((toDoItem, index) => (
+          <div key={index} className="to-do-item-container">
+            <input
+              type="checkbox"
+              id={toDoItem}
+              name={toDoItem}
+              value={toDoItem}
+              className="to-do-input"
+              onChange={checkboxChange}
+            ></input>
+            <label className="to-do-item">{toDoItem}</label>
+          </div>
+        ))}
+      </div>
       <Modal
         title="To do"
         open={isModalOpen}
