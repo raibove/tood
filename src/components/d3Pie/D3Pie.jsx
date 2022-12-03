@@ -32,9 +32,14 @@ const D3Pie = () => {
 
   const handleOk = () => {
     let tempToDo = toDo;
-    tempToDo.push(title);
+    let newToDo = {
+      title: title,
+      completed: false,
+    };
+    // tempToDo.push(title);
     setTitle("");
-    setToDo(tempToDo);
+    // setToDo(tempToDo);
+    setToDo([...tempToDo, newToDo]);
     setIsModalOpen(false);
   };
 
@@ -187,7 +192,13 @@ const D3Pie = () => {
   };
 
   const checkboxChange = (e) => {
-    console.log(e.target.checked);
+    const index = toDo.findIndex((object) => {
+      return object.title === e.target.value;
+    });
+
+    let tempToDo = toDo;
+    tempToDo[index].completed = !tempToDo[index].completed;
+    setToDo([...tempToDo]);
   };
 
   return (
@@ -198,13 +209,19 @@ const D3Pie = () => {
           <div key={index} className="to-do-item-container">
             <input
               type="checkbox"
-              id={toDoItem}
-              name={toDoItem}
-              value={toDoItem}
+              id={toDoItem.title}
+              name={toDoItem.title}
+              value={toDoItem.title}
               className="to-do-input"
               onChange={checkboxChange}
             ></input>
-            <label className="to-do-item">{toDoItem}</label>
+            <label
+              className={
+                toDoItem.completed ? "to-do-item to-do-completed" : "to-do-item"
+              }
+            >
+              {toDoItem.title}
+            </label>
           </div>
         ))}
       </div>

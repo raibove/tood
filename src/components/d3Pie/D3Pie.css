@@ -23,3 +23,9 @@
     width: 15px;
     margin: 0px 10px;
 }
+
+.to-do-completed{
+    text-decoration: line-through;
+    text-decoration-color: white;
+    text-decoration-thickness: 2px;
+}
