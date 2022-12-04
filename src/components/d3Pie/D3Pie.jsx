@@ -18,6 +18,7 @@ const D3Pie = () => {
   const dataFetchedRef = useRef(false);
 
   useEffect(() => {
+    createSvg();
     setTimeout(() => {
       if (myRef && myRef.current) {
         const { input } = myRef.current;
@@ -60,27 +61,51 @@ const D3Pie = () => {
   let angularScale = d3.scaleLinear().range([0, 359]);
   let abval = angularScale.invert(0);
 
+  const getRing = () => {
+    const parent = d3.select(".ring-input-svg");
+    let ring = d3.select("#rim");
+    if (ring.empty()) {
+      ring = parent
+        .append("g")
+        .attr("id", "rim")
+        .attr("transform", "translate(" + radius + "," + radius + ")");
+
+      ring
+        .append("circle")
+        .attr("r", radius)
+        .attr("class", "ring")
+        .attr("id", "ring")
+        .attr("fill", "white");
+
+      return ring;
+    } else {
+      return ring;
+    }
+  };
+
+  const getHandle = () => {
+    let ring = d3.select("#rim");
+    let handle = d3.select("#handle");
+    if (handle.empty()) {
+      return ring
+        .append("circle")
+        .attr("r", 10)
+        .attr("class", "handle")
+        .attr("id", "handle")
+        .attr("transform", function (d) {
+          return (
+            "rotate(" + angularScale(abval) + ")  translate(0,-" + radius + ")"
+          );
+        });
+    } else {
+      return handle;
+    }
+  };
+
   const createSvg = () => {
-    const parent = d3
-      .select(".ring-input")
-      .append("svg")
-      .attr("height", height)
-      .attr("width", width)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    const parent = d3.select(".ring-input-svg");
 
-    const ring = parent
-      .append("g")
-      .attr("id", "rim")
-      .attr("transform", "translate(" + radius + "," + radius + ")");
-
-    ring
-      .append("circle")
-      .attr("r", radius)
-      .attr("class", "ring")
-      .attr("id", "ring")
-      .attr("fill", "white");
-
+    const ring = getRing();
     const drag = d3
       .drag()
       .subject(function (event, d) {
@@ -112,7 +137,8 @@ const D3Pie = () => {
         .attr("fill", function () {
           return "hsl(" + Math.floor(Math.random() * 16777215) + ",100%,50%)";
         });
-
+      console.log(arcArray);
+      console.log(arrAngle);
       let tempArcArray = arcArray;
       tempArcArray.push(colorArc);
       setArcArray(tempArcArray);
@@ -124,17 +150,9 @@ const D3Pie = () => {
       });
     };
 
-    const hndl = ring
-      .append("circle")
-      .attr("r", 10)
-      .attr("class", "handle")
-      .attr("id", "handle")
-      .attr("transform", function (d) {
-        return (
-          "rotate(" + angularScale(abval) + ")  translate(0,-" + radius + ")"
-        );
-      })
-      .call(drag);
+    const hndl = getHandle();
+
+    hndl.call(drag);
 
     arrAngle.push(0);
 
@@ -171,17 +189,6 @@ const D3Pie = () => {
     }
   };
 
-  const printArc = () => {
-    console.log(arcArray);
-    arcArray[1].attr("fill", "black");
-  };
-
-  useEffect(() => {
-    if (dataFetchedRef.current) return;
-    dataFetchedRef.current = true;
-    createSvg();
-  }, []);
-
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       handleOk();
@@ -203,7 +210,11 @@ const D3Pie = () => {
 
   return (
     <div className="to-do-container">
-      <div className="ring-input"></div>
+      <div className="ring-input">
+        <svg height={height} width={width}>
+          <g transform="translate(15,15)" className="ring-input-svg"></g>
+        </svg>
+      </div>
       <div className="to-do-list">
         {toDo.map((toDoItem, index) => (
           <div key={index} className="to-do-item-container">
