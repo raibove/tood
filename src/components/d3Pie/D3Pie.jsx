@@ -23,8 +23,8 @@ const D3Pie = () => {
   const [toDo, setToDo] = useState([]);
   const [newAngle, setNewAngle] = useState(0);
   const [abVal, setAbVal] = useState(angularScale.invert(0));
-
-  let angleIndex = 0;
+  const [angleIndex, setAngleIndex] = useState(0);
+  // let angleIndex = 0;
 
   // let newAngle = 0;
   // let tempAngle = 0;
@@ -116,19 +116,21 @@ const D3Pie = () => {
         let tempArrAngle = arrAngle;
         tempArrAngle.push(angularScale(tempAbVal));
         setArrAngle(tempArrAngle);
-        angleIndex++;
-        addArc();
+        // angleIndex++;
+        setAngleIndex(angleIndex + 1);
+        addArc(angleIndex + 1);
         hndl.moveToFront();
         showModal();
       });
 
-    function addArc() {
+    function addArc(tempAngleIndex) {
       let arc = d3
         .arc()
         .innerRadius(0)
         .outerRadius(radius)
-        .startAngle(arrAngle[angleIndex - 1] * (pi / 180))
-        .endAngle(arrAngle[angleIndex] * (pi / 180));
+        .startAngle(arrAngle[tempAngleIndex - 1] * (pi / 180))
+        .endAngle(arrAngle[tempAngleIndex] * (pi / 180));
+
       let colorArc = ring
         .append("path")
         .attr("class", "arc")
