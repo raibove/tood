@@ -24,10 +24,6 @@ const D3Pie = () => {
   const [newAngle, setNewAngle] = useState(0);
   const [abVal, setAbVal] = useState(angularScale.invert(0));
   const [angleIndex, setAngleIndex] = useState(0);
-  // let angleIndex = 0;
-
-  // let newAngle = 0;
-  // let tempAngle = 0;
 
   useEffect(() => {
     createSvg();
@@ -112,15 +108,17 @@ const D3Pie = () => {
       })
       .on("drag", dragmove)
       .on("end", function (d) {
-        setNewAngle(tempAngle);
-        let tempArrAngle = arrAngle;
-        tempArrAngle.push(angularScale(tempAbVal));
-        setArrAngle(tempArrAngle);
-        // angleIndex++;
-        setAngleIndex(angleIndex + 1);
-        addArc(angleIndex + 1);
-        hndl.moveToFront();
-        showModal();
+        if (arrAngle[arrAngle.length - 1] !== angularScale(tempAbVal)) {
+          setNewAngle(tempAngle);
+          let tempArrAngle = arrAngle;
+          tempArrAngle.push(angularScale(tempAbVal));
+          setArrAngle(tempArrAngle);
+
+          setAngleIndex(angleIndex + 1);
+          addArc(angleIndex + 1);
+          hndl.moveToFront();
+          showModal();
+        }
       });
 
     function addArc(tempAngleIndex) {
@@ -198,6 +196,7 @@ const D3Pie = () => {
       handleOk();
     }
   };
+
   const onChange = (e) => {
     setTitle(e.target.value);
   };
@@ -206,7 +205,6 @@ const D3Pie = () => {
     const index = toDo.findIndex((object) => {
       return object.title === e.target.value;
     });
-
     let tempToDo = toDo;
     tempToDo[index].completed = !tempToDo[index].completed;
     setToDo([...tempToDo]);
