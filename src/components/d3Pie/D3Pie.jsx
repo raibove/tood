@@ -9,13 +9,11 @@ const { TextArea } = Input;
 
 const D3Pie = () => {
   const myRef = useRef();
-  const [arrAngle, setArrAngle] = useState([]);
+  const [arrAngle, setArrAngle] = useState([0]);
   const [arcArray, setArcArray] = useState([]);
   const [title, setTitle] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toDo, setToDo] = useState([]);
-
-  const dataFetchedRef = useRef(false);
 
   useEffect(() => {
     createSvg();
@@ -51,7 +49,8 @@ const D3Pie = () => {
   let angleIndex = 0;
   const pi = Math.PI;
 
-  let newAngle = 0;
+  const [newAngle, setNewAngle] = useState(0);
+  // let newAngle = 0;
   let tempAngle = 0;
   let height = 300,
     width = 300,
@@ -59,7 +58,7 @@ const D3Pie = () => {
   let radius = (height - margin.top - margin.bottom) / 2;
 
   let angularScale = d3.scaleLinear().range([0, 359]);
-  let abval = angularScale.invert(0);
+  const [abVal, setAbVal] = useState(angularScale.invert(0));
 
   const getRing = () => {
     const parent = d3.select(".ring-input-svg");
@@ -94,7 +93,7 @@ const D3Pie = () => {
         .attr("id", "handle")
         .attr("transform", function (d) {
           return (
-            "rotate(" + angularScale(abval) + ")  translate(0,-" + radius + ")"
+            "rotate(" + angularScale(abVal) + ")  translate(0,-" + radius + ")"
           );
         });
     } else {
@@ -113,9 +112,9 @@ const D3Pie = () => {
       })
       .on("drag", dragmove)
       .on("end", function (d) {
-        newAngle = tempAngle;
+        setNewAngle(tempAngle);
         let tempArrAngle = arrAngle;
-        tempArrAngle.push(angularScale(abval));
+        tempArrAngle.push(angularScale(abVal));
         setArrAngle(tempArrAngle);
         angleIndex++;
         addArc();
@@ -154,10 +153,11 @@ const D3Pie = () => {
 
     hndl.call(drag);
 
-    arrAngle.push(0);
+    //arrAngle.push(0);
 
     function dragmove(d, i) {
       if (tempAngle != 360) {
+        let tempAbVal = abVal;
         let coordinates = d3.pointer(d.sourceEvent, parent.node());
         let x = coordinates[0] - radius;
         let y = coordinates[1] - radius;
@@ -176,13 +176,20 @@ const D3Pie = () => {
           return;
         }
         if (currentAngle > newAngle) {
+          console.log(currentAngle);
+          console.log(newAngle);
           tempAngle = currentAngle;
-          abval = angularScale.invert(currentAngle);
+          setAbVal(angularScale.invert(currentAngle));
+          tempAbVal = angularScale.invert(currentAngle);
         }
 
         d3.select(this).attr("transform", function (d) {
           return (
-            "rotate(" + angularScale(abval) + ")  translate(0,-" + radius + ")"
+            "rotate(" +
+            angularScale(tempAbVal) +
+            ")  translate(0,-" +
+            radius +
+            ")"
           );
         });
       }
