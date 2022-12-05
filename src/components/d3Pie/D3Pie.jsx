@@ -9,11 +9,25 @@ const { TextArea } = Input;
 
 const D3Pie = () => {
   const myRef = useRef();
+  const pi = Math.PI;
+  let height = 300,
+    width = 300,
+    margin = { top: 15, left: 15, bottom: 15, right: 15 };
+  let radius = (height - margin.top - margin.bottom) / 2;
+  let angularScale = d3.scaleLinear().range([0, 359]);
+
   const [arrAngle, setArrAngle] = useState([0]);
   const [arcArray, setArcArray] = useState([]);
   const [title, setTitle] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toDo, setToDo] = useState([]);
+  const [newAngle, setNewAngle] = useState(0);
+  const [abVal, setAbVal] = useState(angularScale.invert(0));
+
+  let angleIndex = 0;
+
+  // let newAngle = 0;
+  // let tempAngle = 0;
 
   useEffect(() => {
     createSvg();
@@ -35,9 +49,8 @@ const D3Pie = () => {
       title: title,
       completed: false,
     };
-    // tempToDo.push(title);
+
     setTitle("");
-    // setToDo(tempToDo);
     setToDo([...tempToDo, newToDo]);
     setIsModalOpen(false);
   };
@@ -45,20 +58,6 @@ const D3Pie = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  let angleIndex = 0;
-  const pi = Math.PI;
-
-  const [newAngle, setNewAngle] = useState(0);
-  // let newAngle = 0;
-  let tempAngle = 0;
-  let height = 300,
-    width = 300,
-    margin = { top: 15, left: 15, bottom: 15, right: 15 };
-  let radius = (height - margin.top - margin.bottom) / 2;
-
-  let angularScale = d3.scaleLinear().range([0, 359]);
-  const [abVal, setAbVal] = useState(angularScale.invert(0));
 
   const getRing = () => {
     const parent = d3.select(".ring-input-svg");
@@ -103,7 +102,8 @@ const D3Pie = () => {
 
   const createSvg = () => {
     const parent = d3.select(".ring-input-svg");
-
+    let tempAbVal = abVal;
+    let tempAngle = newAngle;
     const ring = getRing();
     const drag = d3
       .drag()
@@ -114,7 +114,7 @@ const D3Pie = () => {
       .on("end", function (d) {
         setNewAngle(tempAngle);
         let tempArrAngle = arrAngle;
-        tempArrAngle.push(angularScale(abVal));
+        tempArrAngle.push(angularScale(tempAbVal));
         setArrAngle(tempArrAngle);
         angleIndex++;
         addArc();
@@ -136,8 +136,7 @@ const D3Pie = () => {
         .attr("fill", function () {
           return "hsl(" + Math.floor(Math.random() * 16777215) + ",100%,50%)";
         });
-      console.log(arcArray);
-      console.log(arrAngle);
+
       let tempArcArray = arcArray;
       tempArcArray.push(colorArc);
       setArcArray(tempArcArray);
@@ -153,11 +152,8 @@ const D3Pie = () => {
 
     hndl.call(drag);
 
-    //arrAngle.push(0);
-
     function dragmove(d, i) {
       if (tempAngle != 360) {
-        let tempAbVal = abVal;
         let coordinates = d3.pointer(d.sourceEvent, parent.node());
         let x = coordinates[0] - radius;
         let y = coordinates[1] - radius;
@@ -172,12 +168,11 @@ const D3Pie = () => {
         if (currentAngle > 359) {
           currentAngle = 360;
         }
+
         if (tempAngle == 0 && currentAngle > 290) {
           return;
         }
         if (currentAngle > newAngle) {
-          console.log(currentAngle);
-          console.log(newAngle);
           tempAngle = currentAngle;
           setAbVal(angularScale.invert(currentAngle));
           tempAbVal = angularScale.invert(currentAngle);
