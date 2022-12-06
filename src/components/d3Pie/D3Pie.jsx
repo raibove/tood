@@ -24,6 +24,7 @@ const D3Pie = () => {
   const [newAngle, setNewAngle] = useState(0);
   const [abVal, setAbVal] = useState(angularScale.invert(0));
   const [angleIndex, setAngleIndex] = useState(0);
+  const [id, setId] = useState(0);
 
   useEffect(() => {
     createSvg();
@@ -44,8 +45,9 @@ const D3Pie = () => {
     let newToDo = {
       title: title,
       completed: false,
+      id: id,
     };
-
+    setId(() => id + 1);
     setTitle("");
     setToDo([...tempToDo, newToDo]);
     setIsModalOpen(false);
@@ -202,12 +204,24 @@ const D3Pie = () => {
   };
 
   const checkboxChange = (e) => {
-    const index = toDo.findIndex((object) => {
-      return object.title === e.target.value;
+    console.log(e.target.value);
+    let index = toDo.findIndex((object) => {
+      return object.id == e.target.value;
     });
+    // if (index === undefined) index = 0;
+    console.log(toDo);
+    console.log(index);
     let tempToDo = toDo;
     tempToDo[index].completed = !tempToDo[index].completed;
+    console.log(tempToDo[index].arc);
+
+    if (tempToDo[index].arc === undefined)
+      tempToDo[index].arc = arcArray[index];
     setToDo([...tempToDo]);
+    console.log(tempToDo[index].completed);
+    if (tempToDo[index].completed === true)
+      arcArray[index].attr("fill", "grey");
+    else arcArray[index].attr("fill", tempToDo[index].arc.attr("fill"));
   };
 
   return (
@@ -224,7 +238,7 @@ const D3Pie = () => {
               type="checkbox"
               id={toDoItem.title}
               name={toDoItem.title}
-              value={toDoItem.title}
+              value={index}
               className="to-do-input"
               onChange={checkboxChange}
             ></input>
