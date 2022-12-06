@@ -4,6 +4,7 @@ import { Button, Input, Modal } from "antd";
 import FloatInput from "./FloatInput";
 
 import "./D3Pie.css";
+import axios from "axios";
 
 const { TextArea } = Input;
 
@@ -40,17 +41,26 @@ const D3Pie = () => {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    let tempToDo = toDo;
-    let newToDo = {
-      title: title,
-      completed: false,
-      id: id,
-    };
-    setId(() => id + 1);
-    setTitle("");
-    setToDo([...tempToDo, newToDo]);
-    setIsModalOpen(false);
+  const handleOk = async () => {
+    try {
+      let tempToDo = toDo;
+      let newToDo = {
+        title: title,
+        status: false,
+        id: id,
+      };
+
+      const response = await axios.post(`api/todos`, newToDo);
+      console.log(response);
+      setId(() => id + 1);
+      setToDo([...tempToDo, newToDo]);
+      setTitle("");
+      setIsModalOpen(false);
+    } catch (error) {
+      console.log(error);
+      console.log("failed to set error");
+      setIsModalOpen(false);
+    }
   };
 
   const handleCancel = () => {
@@ -212,15 +222,14 @@ const D3Pie = () => {
     console.log(toDo);
     console.log(index);
     let tempToDo = toDo;
-    tempToDo[index].completed = !tempToDo[index].completed;
+    tempToDo[index].status = !tempToDo[index].status;
     console.log(tempToDo[index].arc);
 
     if (tempToDo[index].arc === undefined)
       tempToDo[index].arc = arcArray[index];
     setToDo([...tempToDo]);
-    console.log(tempToDo[index].completed);
-    if (tempToDo[index].completed === true)
-      arcArray[index].attr("fill", "grey");
+    console.log(tempToDo[index].status);
+    if (tempToDo[index].status === true) arcArray[index].attr("fill", "grey");
     else arcArray[index].attr("fill", tempToDo[index].arc.attr("fill"));
   };
 
@@ -244,7 +253,7 @@ const D3Pie = () => {
             ></input>
             <label
               className={
-                toDoItem.completed ? "to-do-item to-do-completed" : "to-do-item"
+                toDoItem.status ? "to-do-item to-do-status" : "to-do-item"
               }
             >
               {toDoItem.title}
