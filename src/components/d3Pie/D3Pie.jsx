@@ -52,10 +52,15 @@ const D3Pie = () => {
 
       const response = await axios.post(`api/todos`, newToDo);
       console.log(response);
+      var myPath = document.querySelector(`#arc${id}`);
       setId(() => id + 1);
       setToDo([...tempToDo, newToDo]);
       setTitle("");
       setIsModalOpen(false);
+
+      myPath.addEventListener("click", function () {
+        alert(`click ${id}`);
+      });
     } catch (error) {
       console.log(error);
       console.log("failed to set error");
@@ -144,6 +149,7 @@ const D3Pie = () => {
       let colorArc = ring
         .append("path")
         .attr("class", "arc")
+        .attr("id", `arc${id}`)
         .attr("d", arc)
         .attr("fill", function () {
           return "hsl(" + Math.floor(Math.random() * 16777215) + ",100%,50%)";
@@ -225,12 +231,15 @@ const D3Pie = () => {
     tempToDo[index].status = !tempToDo[index].status;
     console.log(tempToDo[index].arc);
 
-    if (tempToDo[index].arc === undefined)
+    if (tempToDo[index].arc === undefined) {
+      console.log("in undefined");
+      console.log(arcArray[index].attr("fill"));
       tempToDo[index].arc = arcArray[index];
+    }
     setToDo([...tempToDo]);
     console.log(tempToDo[index].status);
-    if (tempToDo[index].status === true) arcArray[index].attr("fill", "grey");
-    else arcArray[index].attr("fill", tempToDo[index].arc.attr("fill"));
+    // if (tempToDo[index].status === true) arcArray[index].attr("fill", "grey");
+    // else arcArray[index].attr("fill", tempToDo[index].arc.attr("fill"));
   };
 
   return (
@@ -294,3 +303,5 @@ const D3Pie = () => {
 };
 
 export default D3Pie;
+
+//to-do : on check dark to normal color
