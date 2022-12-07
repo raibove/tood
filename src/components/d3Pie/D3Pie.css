@@ -3,7 +3,7 @@
 }
 
 .to-do-container{
-    margin: 50px;
+    margin: 100px 0px;
     display: flex;
     justify-content: space-around;
 }
@@ -28,4 +28,14 @@
     text-decoration: line-through;
     text-decoration-color: white;
     text-decoration-thickness: 2px;
+}
+
+.to-do-empty{
+    color: #B6D1C3;
+    font-family: cursive;
+    font-size: 28px;
+}
+
+.to-do-list{
+    width: 30vw;
 }

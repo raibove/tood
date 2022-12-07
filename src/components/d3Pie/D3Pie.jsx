@@ -103,6 +103,9 @@ const D3Pie = () => {
         .attr("r", 10)
         .attr("class", "handle")
         .attr("id", "handle")
+        .attr("fill", "white")
+        .attr("stroke", "black")
+        .attr("stroke-width", "4")
         .attr("transform", function (d) {
           return (
             "rotate(" + angularScale(abVal) + ")  translate(0,-" + radius + ")"
@@ -250,6 +253,11 @@ const D3Pie = () => {
         </svg>
       </div>
       <div className="to-do-list">
+        {toDo.length === 0 && (
+          <h2 className="to-do-empty">
+            No to-do item created. Drag the handle to create to-do
+          </h2>
+        )}
         {toDo.map((toDoItem, index) => (
           <div key={index} className="to-do-item-container">
             <input

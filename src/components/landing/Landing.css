@@ -1,0 +1,51 @@
+.landing {
+  flex-grow: 1;
+  height: 20px;
+  width: 100%;
+  background: url("../../assets/bg6.svg") bottom right;
+  background-repeat: no-repeat;
+  background-size: 50%;
+  font-family: "Cabin Sketch", cursive;
+}
+
+.landing-title {
+  padding: 10vh 40vw 0 10vw;
+  font-size: 60px;
+  line-height: 100px;
+  color: #565ddc;
+}
+
+.landing-button {
+  color: #fff;
+  background-color: #565ddc;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: white;
+  cursor: pointer;
+  font-size: 22px;
+  margin-left: 20vw;
+}
+
+@media only screen and (max-width: 768px) {
+  .landing-title {
+    font-size: 40px;
+    line-height: 50px;
+    padding: 15vh 10vw 0 10vw;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .landing-title {
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  .landing-button {
+    padding: 10px;
+    margin-left: 30vw;
+  }
+
+  .landing {
+    background-size: 80%;
+  }
+}
