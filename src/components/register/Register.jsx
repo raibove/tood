@@ -31,15 +31,22 @@ const Register = ({ title }) => {
 
   const userRegister = async () => {
     try {
-      let response = await axios.post(`${baseURL}/api/auth/register`, {
-        email: email,
-        password: password,
-      });
+      if (baseURL != undefined) {
+        let response = await axios.post(`${baseURL}/api/auth/register`, {
+          email: email,
+          password: password,
+        });
+      } else {
+        await axios.post(`/api/auth/register`, {
+          email: email,
+          password: password,
+        });
+      }
 
       openNotificationWithIcon("success", "User Registration Successful");
       // navigate("/to-do");
-      let baseUrl = window.location.origin;
-      window.location.replace(baseUrl + "/to-do");
+      let homeUrl = window.location.origin;
+      window.location.replace(homeUrl + "/to-do");
     } catch (err) {
       console.log(err);
       notifyError(err);
@@ -48,14 +55,20 @@ const Register = ({ title }) => {
 
   const userLogin = async () => {
     try {
-      let response = await axios.post(`${baseURL}/api/auth/login`, {
-        email: email,
-        password: password,
-      });
-
+      if (baseURL != undefined) {
+        let response = await axios.post(`${baseURL}/api/auth/login`, {
+          email: email,
+          password: password,
+        });
+      } else {
+        await axios.post(`/api/auth/login`, {
+          email: email,
+          password: password,
+        });
+      }
       openNotificationWithIcon("success", "User Login Successful");
-      let baseUrl = window.location.origin;
-      window.location.replace(baseUrl + "/to-do");
+      let homeUrl = window.location.origin;
+      window.location.replace(homeUrl + "/to-do");
     } catch (err) {
       console.log(err);
       notifyError(err);
