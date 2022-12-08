@@ -1,11 +1,16 @@
-.header{
-    height:70px;
-    background-color: #646CFF;
-    /* #c8c7ff */
-    width: 100vw;
-    align-items: center;
-    display: flex;
+.header {
+  height: 70px;
+  background-color: #646cff;
+  /* #c8c7ff */
+  width: 100vw;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 }
-.header-logo{
-    height: 80%;
+.header-logo {
+  height: 80%;
+}
+
+.login-button-container {
+  margin-right: 50px;
 }

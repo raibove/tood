@@ -3,19 +3,13 @@ import "./App.css";
 import D3Pie from "./components/d3Pie/D3Pie";
 import Landing from "./components/landing/Landing";
 import Register from "./components/register/Register";
-import {
-  BrowserRouter,
-  RouterProvider,
-  Route,
-  Routes,
-  Link,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="App">
+        <Header />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Register title="Login" />} />
@@ -29,8 +23,8 @@ function App() {
             }
           />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 
