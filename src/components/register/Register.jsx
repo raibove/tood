@@ -1,5 +1,5 @@
 import "./Register.css";
-import { Input } from "antd";
+import { Input, Button } from "antd";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { notification } from "antd";
@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
 const Register = ({ title }) => {
+  const [axiosLoading, setAxionsLoading] = useState(false);
   let baseURL = process.env.REACT_APP_BASE_URL;
   const [cookies] = useCookies(["jwt"]);
   const [loading, setLoading] = useState(true);
@@ -30,6 +31,7 @@ const Register = ({ title }) => {
   };
 
   const userRegister = async () => {
+    setAxionsLoading(true);
     try {
       if (baseURL != undefined) {
         let response = await axios.post(`${baseURL}/api/auth/register`, {
@@ -43,17 +45,20 @@ const Register = ({ title }) => {
         });
       }
 
+      setAxionsLoading(false);
       openNotificationWithIcon("success", "User Registration Successful");
       // navigate("/to-do");
       let homeUrl = window.location.origin;
       window.location.replace(homeUrl + "/to-do");
     } catch (err) {
       console.log(err);
+      setAxionsLoading(false);
       notifyError(err);
     }
   };
 
   const userLogin = async () => {
+    setAxionsLoading(true);
     try {
       if (baseURL != undefined) {
         let response = await axios.post(`${baseURL}/api/auth/login`, {
@@ -66,10 +71,12 @@ const Register = ({ title }) => {
           password: password,
         });
       }
+      setAxionsLoading(false);
       openNotificationWithIcon("success", "User Login Successful");
       let homeUrl = window.location.origin;
       window.location.replace(homeUrl + "/to-do");
     } catch (err) {
+      setAxionsLoading(false);
       console.log(err);
       notifyError(err);
     }
@@ -122,9 +129,14 @@ const Register = ({ title }) => {
               />
             </div>
             <div className="register-button-container">
-              <button className="register-button" onClick={authenticateUser}>
+              <Button
+                size="large"
+                loading={axiosLoading}
+                className="register-button"
+                onClick={authenticateUser}
+              >
                 {title}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
