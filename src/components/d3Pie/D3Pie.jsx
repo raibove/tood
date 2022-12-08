@@ -5,7 +5,6 @@ import FloatInput from "./FloatInput";
 
 import "./D3Pie.css";
 import axios from "axios";
-import { arc } from "d3";
 
 const { TextArea } = Input;
 
