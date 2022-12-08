@@ -38,6 +38,7 @@ const Register = ({ title }) => {
           email: email,
           password: password,
         });
+        setCookie("jwt", response.data.token);
       } else {
         await axios.post(`/api/auth/register`, {
           email: email,

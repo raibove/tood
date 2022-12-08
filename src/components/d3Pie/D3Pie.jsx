@@ -9,6 +9,8 @@ import axios from "axios";
 const { TextArea } = Input;
 
 const D3Pie = () => {
+  let baseURL = process.env.REACT_APP_BASE_URL;
+
   const myRef = useRef();
   const pi = Math.PI;
   let height = 300,
@@ -50,8 +52,15 @@ const D3Pie = () => {
         id: id,
       };
 
-      const response = await axios.post(`api/todos`, newToDo);
-      console.log(response);
+      let response = null;
+
+      if (baseURL != undefined) {
+        let response = await axios.post(`${baseURL}api/todos`, newToDo);
+        setCookie("jwt", response.data.token);
+      } else {
+        response = await axios.post(`api/todos`, newToDo);
+      }
+
       var myPath = document.querySelector(`#arc${id}`);
       setId(() => id + 1);
       setToDo([...tempToDo, newToDo]);
