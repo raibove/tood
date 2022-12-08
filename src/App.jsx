@@ -10,7 +10,7 @@ import {
   Routes,
   Link,
 } from "react-router-dom";
-
+import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
 function App() {
   return (
     <div className="App">
@@ -20,7 +20,14 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Register title="Login" />} />
           <Route path="/register" element={<Register title="Register" />} />
-          <Route path="/to-do" element={<D3Pie />} />
+          <Route
+            path="/to-do"
+            element={
+              <ProtectedRoute>
+                <D3Pie />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>
