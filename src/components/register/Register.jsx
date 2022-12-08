@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
 const Register = ({ title }) => {
+  let baseURL = process.env.REACT_APP_BASE_URL;
   const [cookies] = useCookies(["jwt"]);
   const [loading, setLoading] = useState(true);
   const [api, contextHolder] = notification.useNotification();
@@ -30,7 +31,7 @@ const Register = ({ title }) => {
 
   const userRegister = async () => {
     try {
-      let response = await axios.post("/api/auth/register", {
+      let response = await axios.post(`${baseURL}/api/auth/register`, {
         email: email,
         password: password,
       });
@@ -47,7 +48,7 @@ const Register = ({ title }) => {
 
   const userLogin = async () => {
     try {
-      let response = await axios.post("/api/auth/login", {
+      let response = await axios.post(`${baseURL}/api/auth/login`, {
         email: email,
         password: password,
       });
