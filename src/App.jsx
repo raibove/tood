@@ -6,6 +6,7 @@ import Register from "./components/register/Register";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
 import { CookiesProvider } from "react-cookie";
+
 function App() {
   return (
     <BrowserRouter>

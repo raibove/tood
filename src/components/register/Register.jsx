@@ -36,7 +36,9 @@ const Register = ({ title }) => {
       });
 
       openNotificationWithIcon("success", "User Registration Successful");
-      navigate("/to-do");
+      // navigate("/to-do");
+      let baseUrl = window.location.origin;
+      window.location.replace(baseUrl + "/to-do");
     } catch (err) {
       console.log(err);
       notifyError(err);
@@ -51,7 +53,8 @@ const Register = ({ title }) => {
       });
 
       openNotificationWithIcon("success", "User Login Successful");
-      navigate("/to-do");
+      let baseUrl = window.location.origin;
+      window.location.replace(baseUrl + "/to-do");
     } catch (err) {
       console.log(err);
       notifyError(err);
