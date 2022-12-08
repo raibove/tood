@@ -25,8 +25,6 @@ const Register = ({ title }) => {
   const openNotificationWithIcon = (type, notifyTitle) => {
     api[type]({
       message: notifyTitle,
-      description:
-        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
     });
   };
 
@@ -36,13 +34,49 @@ const Register = ({ title }) => {
         email: email,
         password: password,
       });
-      console.log(response);
+
       openNotificationWithIcon("success", "User Registration Successful");
+      navigate("/to-do");
     } catch (err) {
       console.log(err);
+      notifyError(err);
     }
   };
 
+  const userLogin = async () => {
+    try {
+      let response = await axios.post("/api/auth/login", {
+        email: email,
+        password: password,
+      });
+
+      openNotificationWithIcon("success", "User Login Successful");
+      navigate("/to-do");
+    } catch (err) {
+      console.log(err);
+      notifyError(err);
+    }
+  };
+
+  const notifyError = (err) => {
+    if (
+      err.response.data != undefined &&
+      err.response.data.errors != undefined
+    ) {
+      let errors = err.response.data.errors;
+      if (errors.email != "") openNotificationWithIcon("error", errors.email);
+      else if (errors.password != "")
+        openNotificationWithIcon("error", errors.password);
+      else openNotificationWithIcon("error", "Authentication Failed");
+    } else {
+      openNotificationWithIcon("error", "Authentication Failed");
+    }
+  };
+
+  const authenticateUser = () => {
+    if (title === "Login") userLogin();
+    else userRegister();
+  };
   return (
     <>
       {contextHolder}
@@ -71,7 +105,7 @@ const Register = ({ title }) => {
               />
             </div>
             <div className="register-button-container">
-              <button className="register-button" onClick={userRegister}>
+              <button className="register-button" onClick={authenticateUser}>
                 {title}
               </button>
             </div>
