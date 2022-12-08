@@ -5,6 +5,7 @@ import FloatInput from "./FloatInput";
 
 import "./D3Pie.css";
 import axios from "axios";
+import { arc } from "d3";
 
 const { TextArea } = Input;
 
@@ -64,8 +65,29 @@ const D3Pie = () => {
     } catch (error) {
       console.log(error);
       console.log("failed to set error");
+      redrawHandle();
       setIsModalOpen(false);
     }
+  };
+
+  const redrawHandle = () => {
+    // to remove last handle & arc
+    let lastAngle = angularScale.invert(0);
+    if (arrAngle.length > 1) {
+      lastAngle = arrAngle[arrAngle.length - 2];
+    }
+    let tempArrAngle = arrAngle;
+    tempArrAngle.pop();
+    setArrAngle(tempArrAngle);
+
+    const hndl = getHandle();
+    hndl.attr("transform", function (d) {
+      return "rotate(" + lastAngle + ")  translate(0,-" + radius + ")";
+    });
+    let tempArcArray = arcArray;
+    let lastAcrAngle = tempArcArray.pop();
+    lastAcrAngle.remove();
+    setArcArray(tempArcArray);
   };
 
   const handleCancel = () => {
