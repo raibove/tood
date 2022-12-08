@@ -66,12 +66,7 @@ const Register = ({ title }) => {
           password: password,
         });
 
-        setCookie("jwt", response.data.token, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "none",
-          maxAge: maxAge * 1000,
-        });
+        setCookie("jwt", response.data.token);
       } else {
         let response = await axios.post(`/api/auth/login`, {
           email: email,
