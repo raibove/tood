@@ -7,7 +7,7 @@ import { useState } from "react";
 const Landing = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [cookies] = useCookies(["cookie-name"]);
+  const [cookies] = useCookies(["jwt"]);
 
   useEffect(() => {
     if (cookies.jwt) {

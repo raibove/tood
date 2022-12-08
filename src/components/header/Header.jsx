@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie";
 const Header = () => {
   const navigate = useNavigate();
   const handleClick = () => navigate("/login");
-  const [cookies] = useCookies(["cookie-name"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
 
   const navigteToHome = () => {
     if (cookies.jwt) {
@@ -15,13 +15,24 @@ const Header = () => {
       navigate("/");
     }
   };
+
+  const handleLogout = () => {
+    removeCookie("jwt");
+    navigate("/");
+  };
   return (
     <div className="header">
       <img src={Logo} className="header-logo" onClick={navigteToHome} />
       <div className="login-button-container">
-        <button className="landing-button" onClick={handleClick}>
-          Login
-        </button>
+        {cookies.jwt ? (
+          <button className="landing-button" onClick={handleLogout}>
+            Logout
+          </button>
+        ) : (
+          <button className="landing-button" onClick={handleClick}>
+            Login
+          </button>
+        )}
       </div>
     </div>
   );

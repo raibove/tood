@@ -7,7 +7,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
 const Register = ({ title }) => {
-  const [cookies] = useCookies(["cookie-name"]);
+  const [cookies] = useCookies(["jwt"]);
   const [loading, setLoading] = useState(true);
   const [api, contextHolder] = notification.useNotification();
   const [email, setEmail] = useState("");
