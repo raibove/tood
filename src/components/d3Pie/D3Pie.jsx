@@ -4,10 +4,13 @@ import { Button, Input, Modal, notification } from "antd";
 import FloatInput from "./FloatInput";
 import "./D3Pie.css";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const { TextArea } = Input;
 
 const D3Pie = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+
   let baseURL = process.env.REACT_APP_BASE_URL;
 
   const myRef = useRef();
@@ -63,10 +66,14 @@ const D3Pie = () => {
       let response = null;
 
       if (baseURL != undefined) {
-        response = await axios.post(`${baseURL}/api/todos`, newToDo);
+        response = await axios.post(`${baseURL}/api/todos`, newToDo, {
+          withCredentials: true,
+        });
         setCookie("jwt", response.data.token);
       } else {
-        response = await axios.post(`/api/todos`, newToDo);
+        response = await axios.post(`/api/todos`, newToDo, {
+          withCredentials: true,
+        });
       }
 
       var myPath = document.querySelector(`#arc${id}`);
@@ -78,6 +85,10 @@ const D3Pie = () => {
         alert(`click ${id}`);
       });
     } catch (error) {
+      if (error.response.status == 401) {
+        removeCookie("jwt");
+        navigate("/");
+      }
       openNotificationWithIcon("error", "Failed to add to-do");
       redrawHandle();
       setIsModalOpen(false);
