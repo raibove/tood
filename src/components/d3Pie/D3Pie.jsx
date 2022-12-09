@@ -1,8 +1,7 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { Button, Input, Modal } from "antd";
+import { Button, Input, Modal, notification } from "antd";
 import FloatInput from "./FloatInput";
-
 import "./D3Pie.css";
 import axios from "axios";
 
@@ -28,6 +27,14 @@ const D3Pie = () => {
   const [abVal, setAbVal] = useState(angularScale.invert(0));
   const [angleIndex, setAngleIndex] = useState(0);
   const [id, setId] = useState(0);
+  const [api, contextHolder] = notification.useNotification();
+  const [loading, setLoading] = useState(true);
+
+  const openNotificationWithIcon = (type, notifyTitle) => {
+    api[type]({
+      message: notifyTitle,
+    });
+  };
 
   useEffect(() => {
     createSvg();
@@ -46,6 +53,7 @@ const D3Pie = () => {
   const handleOk = async () => {
     try {
       let tempToDo = toDo;
+
       let newToDo = {
         title: title,
         status: false,
@@ -55,7 +63,7 @@ const D3Pie = () => {
       let response = null;
 
       if (baseURL != undefined) {
-        let response = await axios.post(`${baseURL}api/todos`, newToDo);
+        response = await axios.post(`${baseURL}api/todos`, newToDo);
         setCookie("jwt", response.data.token);
       } else {
         response = await axios.post(`api/todos`, newToDo);
@@ -66,13 +74,11 @@ const D3Pie = () => {
       setToDo([...tempToDo, newToDo]);
       setTitle("");
       setIsModalOpen(false);
-
       myPath.addEventListener("click", function () {
         alert(`click ${id}`);
       });
     } catch (error) {
-      console.log(error);
-      console.log("failed to set error");
+      openNotificationWithIcon("error", "Failed to add to-do");
       redrawHandle();
       setIsModalOpen(false);
     }
@@ -277,6 +283,8 @@ const D3Pie = () => {
 
   return (
     <div className="to-do-container">
+      {contextHolder}
+
       <div className="ring-input">
         <svg height={height} width={width}>
           <g transform="translate(15,15)" className="ring-input-svg"></g>
@@ -341,5 +349,3 @@ const D3Pie = () => {
 };
 
 export default D3Pie;
-
-//to-do : on check dark to normal color
