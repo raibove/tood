@@ -63,10 +63,10 @@ const D3Pie = () => {
       let response = null;
 
       if (baseURL != undefined) {
-        response = await axios.post(`${baseURL}api/todos`, newToDo);
+        response = await axios.post(`${baseURL}/api/todos`, newToDo);
         setCookie("jwt", response.data.token);
       } else {
-        response = await axios.post(`api/todos`, newToDo);
+        response = await axios.post(`/api/todos`, newToDo);
       }
 
       var myPath = document.querySelector(`#arc${id}`);
