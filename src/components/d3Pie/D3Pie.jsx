@@ -69,7 +69,7 @@ const D3Pie = () => {
         response = await axios.post(`${baseURL}/api/todos`, newToDo, {
           withCredentials: true,
         });
-        setCookie("jwt", response.data.token);
+        // setCookie("jwt", response.data.token);
       } else {
         response = await axios.post(`/api/todos`, newToDo, {
           withCredentials: true,

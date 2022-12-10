@@ -38,7 +38,7 @@ const Register = ({ title }) => {
           email: email,
           password: password,
         });
-        setCookie("jwt", response.data.token);
+        // setCookie("jwt", response.data.token);
       } else {
         await axios.post(`/api/auth/register`, {
           email: email,
@@ -67,7 +67,7 @@ const Register = ({ title }) => {
           password: password,
         });
 
-        setCookie("jwt", response.data.token);
+        // setCookie("jwt", response.data.token);
       } else {
         let response = await axios.post(`/api/auth/login`, {
           email: email,
