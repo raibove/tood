@@ -7,6 +7,8 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
 const Register = ({ title }) => {
+  const maxAge = 3 * 24 * 60 * 60;
+
   const [axiosLoading, setAxionsLoading] = useState(false);
   let baseURL = process.env.REACT_APP_BASE_URL;
   const [cookies, setCookie] = useCookies(["jwt"]);
@@ -38,7 +40,11 @@ const Register = ({ title }) => {
           email: email,
           password: password,
         });
-        // setCookie("jwt", response.data.token);
+        setCookie("jwt", response.data.token, {
+          secure: true,
+          sameSite: "none",
+          maxAge: maxAge * 1000,
+        });
       } else {
         await axios.post(`/api/auth/register`, {
           email: email,
@@ -66,8 +72,11 @@ const Register = ({ title }) => {
           email: email,
           password: password,
         });
-
-        // setCookie("jwt", response.data.token);
+        setCookie("jwt", response.data.token, {
+          secure: true,
+          sameSite: "none",
+          maxAge: maxAge * 1000,
+        });
       } else {
         let response = await axios.post(`/api/auth/login`, {
           email: email,
