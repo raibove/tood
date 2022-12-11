@@ -10,7 +10,6 @@ const { TextArea } = Input;
 
 const D3Pie = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-
   let baseURL = process.env.REACT_APP_BASE_URL;
 
   const myRef = useRef();
@@ -31,7 +30,7 @@ const D3Pie = () => {
   const [angleIndex, setAngleIndex] = useState(0);
   const [id, setId] = useState(0);
   const [api, contextHolder] = notification.useNotification();
-  const [loading, setLoading] = useState(true);
+  const [saveLoading, setSaveLoading] = useState(false);
 
   const openNotificationWithIcon = (type, notifyTitle) => {
     api[type]({
@@ -54,6 +53,7 @@ const D3Pie = () => {
   };
 
   const handleOk = async () => {
+    setSaveLoading(true);
     try {
       let tempToDo = toDo;
 
@@ -84,6 +84,8 @@ const D3Pie = () => {
       myPath.addEventListener("click", function () {
         alert(`click ${id}`);
       });
+
+      setSaveLoading(false);
     } catch (error) {
       if (error.response.status == 401) {
         removeCookie("jwt");
@@ -92,6 +94,7 @@ const D3Pie = () => {
       openNotificationWithIcon("error", "Failed to add to-do");
       redrawHandle();
       setIsModalOpen(false);
+      setSaveLoading(false);
     }
   };
 
@@ -336,7 +339,12 @@ const D3Pie = () => {
         okText="Save"
         maskClosable={false}
         footer={[
-          <Button key="submit" type="primary" onClick={handleOk}>
+          <Button
+            key="submit"
+            type="primary"
+            onClick={handleOk}
+            loading={saveLoading}
+          >
             Save
           </Button>,
         ]}
