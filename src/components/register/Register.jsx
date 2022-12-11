@@ -32,9 +32,21 @@ const Register = ({ title }) => {
     });
   };
 
+  const validateEmail = () => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
   const userRegister = async () => {
     setAxionsLoading(true);
     try {
+      if (!validateEmail()) {
+        setAxionsLoading(false);
+        return openNotificationWithIcon("error", "Invalid email");
+      }
       if (baseURL != undefined) {
         let response = await axios.post(`${baseURL}/api/auth/register`, {
           email: email,
