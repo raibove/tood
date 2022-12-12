@@ -1,2 +1,2 @@
 /* /index.html 200
-/api/*  https://tood-zyyn.onrender.com/api 200
+/api/*  https://tood-zyyn.onrender.com/api/:splat  200
