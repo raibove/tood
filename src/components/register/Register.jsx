@@ -11,7 +11,7 @@ const Register = ({ title }) => {
 
   const [axiosLoading, setAxionsLoading] = useState(false);
   let baseURL = process.env.REACT_APP_BASE_URL;
-  const [cookies, setCookie] = useCookies(["jwt"]);
+  const [cookies, setCookie] = useCookies();
   const [loading, setLoading] = useState(true);
   const [api, contextHolder] = notification.useNotification();
   const [email, setEmail] = useState("");
@@ -62,6 +62,11 @@ const Register = ({ title }) => {
           email: email,
           password: password,
         });
+        setCookie("jwt", response.data.token, {
+          secure: true,
+          sameSite: "none",
+          maxAge: maxAge * 1000,
+        });
       }
 
       setAxionsLoading(false);
@@ -93,6 +98,11 @@ const Register = ({ title }) => {
         let response = await axios.post(`/api/auth/login`, {
           email: email,
           password: password,
+        });
+        setCookie("jwt", response.data.token, {
+          secure: true,
+          sameSite: "none",
+          maxAge: maxAge * 1000,
         });
       }
       setAxionsLoading(false);
