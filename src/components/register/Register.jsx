@@ -47,27 +47,27 @@ const Register = ({ title }) => {
         setAxionsLoading(false);
         return openNotificationWithIcon("error", "Invalid email");
       }
-      if (baseURL != undefined) {
-        let response = await axios.post(`${baseURL}/api/auth/register`, {
-          email: email,
-          password: password,
-        });
-        setCookie("jwt", response.data.token, {
-          secure: true,
-          sameSite: "none",
-          maxAge: maxAge * 1000,
-        });
-      } else {
-        await axios.post(`/api/auth/register`, {
-          email: email,
-          password: password,
-        });
-        setCookie("jwt", response.data.token, {
-          secure: true,
-          sameSite: "none",
-          maxAge: maxAge * 1000,
-        });
-      }
+      // if (baseURL != undefined) {
+      //   let response = await axios.post(`${baseURL}/api/auth/register`, {
+      //     email: email,
+      //     password: password,
+      //   });
+      //   setCookie("jwt", response.data.token, {
+      //     secure: true,
+      //     sameSite: "none",
+      //     maxAge: maxAge * 1000,
+      //   });
+      // } else {
+      await axios.post(`/api/auth/register`, {
+        email: email,
+        password: password,
+      });
+      setCookie("jwt", response.data.token, {
+        secure: true,
+        sameSite: "none",
+        maxAge: maxAge * 1000,
+      });
+      // }
 
       setAxionsLoading(false);
       openNotificationWithIcon("success", "User Registration Successful");
@@ -84,27 +84,27 @@ const Register = ({ title }) => {
   const userLogin = async () => {
     setAxionsLoading(true);
     try {
-      if (baseURL != undefined) {
-        let response = await axios.post(`${baseURL}/api/auth/login`, {
-          email: email,
-          password: password,
-        });
-        setCookie("jwt", response.data.token, {
-          secure: true,
-          sameSite: "none",
-          maxAge: maxAge * 1000,
-        });
-      } else {
-        let response = await axios.post(`/api/auth/login`, {
-          email: email,
-          password: password,
-        });
-        setCookie("jwt", response.data.token, {
-          secure: true,
-          sameSite: "none",
-          maxAge: maxAge * 1000,
-        });
-      }
+      // if (baseURL != undefined) {
+      //   let response = await axios.post(`${baseURL}/api/auth/login`, {
+      //     email: email,
+      //     password: password,
+      //   });
+      //   setCookie("jwt", response.data.token, {
+      //     secure: true,
+      //     sameSite: "none",
+      //     maxAge: maxAge * 1000,
+      //   });
+      // } else {
+      let response = await axios.post(`/api/auth/login`, {
+        email: email,
+        password: password,
+      });
+      setCookie("jwt", response.data.token, {
+        secure: true,
+        sameSite: "none",
+        maxAge: maxAge * 1000,
+      });
+      // }
       setAxionsLoading(false);
       openNotificationWithIcon("success", "User Login Successful");
       let homeUrl = window.location.origin;
