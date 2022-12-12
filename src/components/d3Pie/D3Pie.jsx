@@ -56,11 +56,18 @@ const D3Pie = () => {
     setSaveLoading(true);
     try {
       let tempToDo = toDo;
+      let tempArcArray = arcArray;
+      let lastAcrArr = tempArcArray.pop();
+
+      let tempArrAngle = arrAngle;
+      let lasrArrAngle = tempArrAngle.pop();
 
       let newToDo = {
         title: title,
         status: false,
         id: id,
+        arc: lastAcrArr,
+        angle: lasrArrAngle,
       };
 
       let response = null;
@@ -99,6 +106,7 @@ const D3Pie = () => {
   };
 
   const redrawHandle = () => {
+    console.log("redraw hndl");
     // to remove last handle & arc
     let lastAngle = angularScale.invert(0);
     if (arrAngle.length > 1) {
@@ -182,22 +190,22 @@ const D3Pie = () => {
           setNewAngle(tempAngle);
           let tempArrAngle = arrAngle;
           tempArrAngle.push(angularScale(tempAbVal));
-          setArrAngle(tempArrAngle);
-
+          setArrAngle([...arrAngle, angularScale(tempAbVal)]);
           setAngleIndex(angleIndex + 1);
-          addArc(angleIndex + 1);
+
+          addArc(angleIndex + 1, tempArrAngle);
           hndl.moveToFront();
           showModal();
         }
       });
 
-    function addArc(tempAngleIndex) {
+    function addArc(tempAngleIndex, tempArrAngle) {
       let arc = d3
         .arc()
         .innerRadius(0)
         .outerRadius(radius)
-        .startAngle(arrAngle[tempAngleIndex - 1] * (pi / 180))
-        .endAngle(arrAngle[tempAngleIndex] * (pi / 180));
+        .startAngle(tempArrAngle[tempAngleIndex - 1] * (pi / 180))
+        .endAngle(tempArrAngle[tempAngleIndex] * (pi / 180));
 
       let colorArc = ring
         .append("path")
@@ -208,9 +216,9 @@ const D3Pie = () => {
           return "hsl(" + Math.floor(Math.random() * 16777215) + ",100%,50%)";
         });
 
-      let tempArcArray = arcArray;
-      tempArcArray.push(colorArc);
-      setArcArray(tempArcArray);
+      // let tempArcArray = arcArray;
+      // tempArcArray.push(colorArc);
+      setArcArray([...arcArray, colorArc]);
     }
 
     d3.selection.prototype.moveToFront = function () {
