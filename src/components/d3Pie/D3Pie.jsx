@@ -10,7 +10,6 @@ const { TextArea } = Input;
 
 const D3Pie = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  let baseURL = process.env.REACT_APP_BASE_URL;
 
   const myRef = useRef();
   const pi = Math.PI;
@@ -31,6 +30,7 @@ const D3Pie = () => {
   const [id, setId] = useState(0);
   const [api, contextHolder] = notification.useNotification();
   const [saveLoading, setSaveLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const openNotificationWithIcon = (type, notifyTitle) => {
     api[type]({
@@ -50,6 +50,47 @@ const D3Pie = () => {
 
   const showModal = () => {
     setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    getToDo();
+  }, []);
+
+  const getToDo = async () => {
+    try {
+      let response = null;
+
+      response = await axios.get(`api/todos`);
+      console.log(response.data);
+      if (response.data != undefined && response.data.length != 0) {
+        let tempToDo = [];
+        let lastId = 0;
+        let tempArcArray = [];
+        let tempArrAngle = arrAngle;
+        response.data.forEach((rsp) => {
+          let newToDo = {
+            title: rsp.title,
+            status: rsp.status,
+            id: rsp.id,
+            arc: rsp.arc,
+            angle: rsp.angle,
+          };
+          lastId = rsp.id;
+          tempToDo.push(newToDo);
+          tempArcArray.push(rsp.arc);
+          tempArrAngle.push(rsp.angle);
+        });
+
+        setArrAngle(tempArrAngle);
+        setArcArray(tempArcArray);
+        setId(() => lastId + 1);
+        setToDo(tempToDo);
+        initialDraw();
+      }
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+    }
   };
 
   const handleOk = async () => {
@@ -72,16 +113,9 @@ const D3Pie = () => {
 
       let response = null;
 
-      if (baseURL != undefined) {
-        response = await axios.post(`${baseURL}/api/todos`, newToDo, {
-          withCredentials: true,
-        });
-        // setCookie("jwt", response.data.token);
-      } else {
-        response = await axios.post(`/api/todos`, newToDo, {
-          withCredentials: true,
-        });
-      }
+      response = await axios.post(`/api/todos`, newToDo, {
+        withCredentials: true,
+      });
 
       var myPath = document.querySelector(`#arc${id}`);
       setId(() => id + 1);
@@ -216,8 +250,6 @@ const D3Pie = () => {
           return "hsl(" + Math.floor(Math.random() * 16777215) + ",100%,50%)";
         });
 
-      // let tempArcArray = arcArray;
-      // tempArcArray.push(colorArc);
       setArcArray([...arcArray, colorArc]);
     }
 
@@ -301,6 +333,20 @@ const D3Pie = () => {
     console.log(tempToDo[index].status);
     // if (tempToDo[index].status === true) arcArray[index].attr("fill", "grey");
     // else arcArray[index].attr("fill", tempToDo[index].arc.attr("fill"));
+  };
+
+  const initialDraw = () => {
+    console.log(arrAngle);
+    let tempArrAngle = arrAngle;
+    let tmp = tempArrAngle.pop();
+    let lastAngle = angularScale.invert(0);
+    console.log(tmp);
+    if (tmp !== undefined) lastAngle = angularScale.invert(tmp);
+    console.log(lastAngle);
+    const hndl = getHandle();
+    hndl.attr("transform", function (d) {
+      return "rotate(" + lastAngle + ")  translate(0,-" + radius + ")";
+    });
   };
 
   return (

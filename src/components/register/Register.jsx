@@ -10,7 +10,6 @@ const Register = ({ title }) => {
   const maxAge = 3 * 24 * 60 * 60;
 
   const [axiosLoading, setAxionsLoading] = useState(false);
-  let baseURL = process.env.REACT_APP_BASE_URL;
   const [cookies, setCookie] = useCookies();
   const [loading, setLoading] = useState(true);
   const [api, contextHolder] = notification.useNotification();
@@ -47,17 +46,6 @@ const Register = ({ title }) => {
         setAxionsLoading(false);
         return openNotificationWithIcon("error", "Invalid email");
       }
-      // if (baseURL != undefined) {
-      //   let response = await axios.post(`${baseURL}/api/auth/register`, {
-      //     email: email,
-      //     password: password,
-      //   });
-      //   setCookie("jwt", response.data.token, {
-      //     secure: true,
-      //     sameSite: "none",
-      //     maxAge: maxAge * 1000,
-      //   });
-      // } else {
       await axios.post(`/api/auth/register`, {
         email: email,
         password: password,
@@ -67,11 +55,8 @@ const Register = ({ title }) => {
         sameSite: "none",
         maxAge: maxAge * 1000,
       });
-      // }
-
       setAxionsLoading(false);
       openNotificationWithIcon("success", "User Registration Successful");
-      // navigate("/to-do");
       let homeUrl = window.location.origin;
       window.location.replace(homeUrl + "/to-do");
     } catch (err) {
@@ -84,17 +69,6 @@ const Register = ({ title }) => {
   const userLogin = async () => {
     setAxionsLoading(true);
     try {
-      // if (baseURL != undefined) {
-      //   let response = await axios.post(`${baseURL}/api/auth/login`, {
-      //     email: email,
-      //     password: password,
-      //   });
-      //   setCookie("jwt", response.data.token, {
-      //     secure: true,
-      //     sameSite: "none",
-      //     maxAge: maxAge * 1000,
-      //   });
-      // } else {
       let response = await axios.post(`/api/auth/login`, {
         email: email,
         password: password,
@@ -104,7 +78,6 @@ const Register = ({ title }) => {
         sameSite: "none",
         maxAge: maxAge * 1000,
       });
-      // }
       setAxionsLoading(false);
       openNotificationWithIcon("success", "User Login Successful");
       let homeUrl = window.location.origin;
